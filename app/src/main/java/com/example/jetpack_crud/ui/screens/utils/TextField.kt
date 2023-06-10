@@ -27,6 +27,7 @@ fun UserInputField(
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
     isError: Boolean = false,
+    onTextChanged: (String) -> Unit,
 ) {
     var text by remember {
         mutableStateOf("")
@@ -36,6 +37,7 @@ fun UserInputField(
         value = text,
         onValueChange = {
             text = it
+            onTextChanged(it)
         },
         label = {
             Text(label)

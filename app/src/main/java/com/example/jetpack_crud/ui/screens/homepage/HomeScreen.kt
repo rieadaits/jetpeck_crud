@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.jetpack_crud.dataclass.UserInfoState
 import com.example.jetpack_crud.ui.screens.utils.UserInputField
 import com.example.jetpack_crud.ui.theme.Purple40
 import com.example.jetpack_crud.viewmodel.UserViewModel
@@ -36,7 +37,9 @@ fun HomeScreen(
             .fillMaxSize()
             .padding(15.dp)
     ) {
-        UserInputField(label = "User Name")
+        UserInputField(label = "User Name", onTextChanged = {
+            userViewModel.addUser(UserInfoState(name = it, id = 1))
+        })
 
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
