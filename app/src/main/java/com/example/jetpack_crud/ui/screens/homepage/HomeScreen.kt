@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.jetpack_crud.dataclass.UserInfoState
 import com.example.jetpack_crud.ui.screens.utils.UserInputField
@@ -38,25 +39,33 @@ fun HomeScreen(
             .padding(15.dp)
     ) {
         UserInputField(label = "User Name", onTextChanged = {
-            userViewModel.addUser(UserInfoState(name = it, id = 1))
+            userViewModel.getUserName(it)
         })
 
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
-        AddUserButton()
+        AddUserButton(userInfo = UserInfoState(name = userViewModel.userName.value, id= 0))
 
         Spacer(modifier = Modifier.padding(vertical = 10.dp))
 
         LazyColumn {
             items(state.value.size) { index ->
-                Text(text = "Item: $index")
+                Text(text = "Name: ${state.value[index].name}, Id: ${state.value[index].id}",
+                    modifier = Modifier.clickable {
+                        userViewModel.deleteUser(index)
+                    }
+
+                )
             }
         }
     }
 }
 
 @Composable
-fun AddUserButton() {
+fun AddUserButton(
+    userViewModel: UserViewModel = hiltViewModel(),
+    userInfo: UserInfoState ? = null
+) {
     Box(modifier = Modifier) {
         Box(
             contentAlignment = Alignment.Center,
@@ -66,7 +75,7 @@ fun AddUserButton() {
                 .align(Alignment.BottomCenter)
                 .clip(RoundedCornerShape(10.dp))
                 .clickable {
-
+                    userViewModel.addUser(userInfo!!)
                 }
                 .background(Purple40)) {
             Text(
